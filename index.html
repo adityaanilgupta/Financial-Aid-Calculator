@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Aid Calculator</title>
+    <script>
+        function calculateAid() {
+            const collegeType = document.getElementById("collegeType").value;
+            const course = document.getElementById("course").value;
+            const marks = parseFloat(document.getElementById("marks").value);
+            const totalFee = parseFloat(document.getElementById("totalFee").value);
+
+            let aid = 0;
+            let cap = 0;
+
+            const aidCaps = {
+                "Junior College": {
+                    "Commerce": 12000,
+                    "Arts": 12000,
+                    "Science": 12000,
+                    "HSVC": 12000,
+                    "Bifocal": 3600
+                },
+                "Diplomas after Tenth": {
+                    "Engineering Diploma": 24000,
+                    "Hotel Management Diploma": 24000,
+                    "Art Diploma": 6000,
+                    "ITI": 12000,
+                    "D Ed": 9600
+                },
+                "Diplomas after 12th Grade": {
+                    "Pharmacy": 30000,
+                    "Fine Arts": 30000,
+                    "Fashion Designing": 30000,
+                    "Interior Designing": 30000,
+                    "Engineering Diploma": 30000,
+                    "Paramedical Diploma": 30000
+                },
+                "Graduation": {
+                    "BA": 9600,
+                    "BCom": 9600,
+                    "BSc": 9600,
+                    "BAF": 24000,
+                    "BMS": 24000,
+                    "BBI": 24000,
+                    "BBA": 24000,
+                    "LLB": 24000,
+                    "BSc IT": 12000,
+                    "BCS": 12000,
+                    "BCA": 12000,
+                    "BPharm": 12000,
+                    "BPT": 12000,
+                    "BSc Nursing": 12000,
+                    "BVSc": 12000,
+                    "Biotech": 12000,
+                    "Bio Sciences": 12000,
+                    "Hotel Management": 24000,
+                    "BMM": 24000,
+                    "Fashion Designing": 30000,
+                    "Fine Arts": 30000,
+                    "Commercial Art": 30000,
+                    "Textile Designing": 30000,
+                    "Engineering Degree": 48000,
+                    "Merchant Navy": 48000,
+                    "Commercial Pilot": 48000,
+                    "Architecture": 48000,
+                    "Medical": 60000
+                }
+            };
+
+            if (collegeType && course) {
+                cap = aidCaps[collegeType][course] || 0;
+            }
+
+            const feeForAid = Math.min(totalFee, cap);
+            aid = (marks / 100) * feeForAid;
+
+            if (totalFee > cap && aid > cap) {
+                aid = cap;
+            }
+
+            document.getElementById("aidAmount").innerText = "Financial Aid Amount: Rs. " + aid.toFixed(2);
+        }
+
+        function updateCourses() {
+            const collegeType = document.getElementById("collegeType").value;
+            const courseSelect = document.getElementById("course");
+            courseSelect.innerHTML = "";
+
+            const courses = {
+                "Junior College": ["Commerce", "Arts", "Science", "HSVC", "Bifocal"],
+                "Diplomas after Tenth": ["Engineering Diploma", "Hotel Management Diploma", "Art Diploma", "ITI", "D Ed"],
+                "Diplomas after 12th Grade": ["Pharmacy", "Fine Arts", "Fashion Designing", "Interior Designing", "Engineering Diploma", "Paramedical Diploma"],
+                "Graduation": ["BA", "BCom", "BSc", "BAF", "BMS", "BBI", "BBA", "LLB", "BSc IT", "BCS", "BCA", "BPharm", "BPT", "BSc Nursing", "BVSc", "Biotech", "Bio Sciences", "Hotel Management", "BMM", "Fashion Designing", "Fine Arts", "Commercial Art", "Textile Designing", "Engineering Degree", "Merchant Navy", "Commercial Pilot", "Architecture", "Medical"]
+            };
+
+            courses[collegeType].forEach(course => {
+                const option = document.createElement("option");
+                option.value = course;
+                option.text = course;
+                courseSelect.add(option);
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Financial Aid Calculator</h1>
+    <form>
+        <label for="collegeType">College Type:</label>
+        <select id="collegeType" name="collegeType" onchange="updateCourses()">
+            <option value="Junior College">Junior College</option>
+            <option value="Diplomas after Tenth">Diplomas after Tenth</option>
+            <option value="Diplomas after 12th Grade">Diplomas after 12th Grade</option>
+            <option value="Graduation">Graduation</option>
+        </select>
+        <br><br>
+
+        <label for="course">Course:</label>
+        <select id="course" name="course"></select>
+        <br><br>
+
+        <label for="marks">Marks (%):</label>
+        <input type="number" id="marks" name="marks" step="0.01" required>
+        <br><br>
+
+        <label for="totalFee">Total Fee (Rs.):</label>
+        <input type="number" id="totalFee" name="totalFee" required>
+        <br><br>
+
+        <button type="button" onclick="calculateAid()">Calculate Aid</button>
+    </form>
+    <h2 id="aidAmount">Financial Aid Amount: Rs. 0.00</h2>
+
+    <script>
+        // Initialize courses on page load
+        document.addEventListener("DOMContentLoaded", updateCourses);
+    </script>
+</body>
+</html>
